@@ -21,6 +21,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add SQL Scripts in [sql](sql/README.md).
+- Add setup configuration scripts for [21c](config/setup/README.md)
+- Add startup configuration scripts for [21c](config/startup/README.md)
 
 ### Changed
 
