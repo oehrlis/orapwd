@@ -1,0 +1,43 @@
+# -----------------------------------------------------------------------
+# Trivadis AG, Business Development & Support (BDS)
+# Saegereistrasse 29, 8152 Glattbrugg, Switzerland
+# -----------------------------------------------------------------------
+# Name.......: docker-compose.yml
+# Author.....: Stefan Oehrli (oes) stefan.oehrli@trivadis.com
+# Editor.....: Stefan Oehrli
+# Date.......: 2021.11.11
+# Revision...: --
+# Purpose....: Simple compose file to create a 21.4.0.0 database
+# Notes......: --
+#
+# Reference..: https://github.com/oehrlis/oudbase
+# License....: GPL-3.0+
+# -----------------------------------------------------------------------
+# Modified...:
+# see git revision history with git log for more information on changes
+# -----------------------------------------------------------------------
+version: '3'
+services:
+
+  tpwd21c:
+    image: ${DOCKER_USER}/${DOCKER_REPO}:21.4.0.0
+    container_name: tpwd21c
+    hostname: tpwd21c
+    restart: unless-stopped
+    network_mode: bridge
+    volumes:
+      - ${DOCKER_VOLUME_BASE}/tpwd21c:/u01
+      - ./config:/u01/config
+      - ./sql:/u01/sql
+      - ./bin:/u01/bin
+    ports:
+      - 1521
+    environment:
+      CONTAINER: 'TRUE'
+      INSTANCE_INIT: /u01/config
+      ORACLE_SID: TPWD21C
+      CUSTOM_RSP: /u01/config/etc
+      ORADBA_DBC_FILE: dbca21.0.0.dbc.tmpl
+      ORADBA_RSP_FILE: dbca21.0.0.rsp.tmpl
+
+# - EOF -----------------------------------------------------------------
