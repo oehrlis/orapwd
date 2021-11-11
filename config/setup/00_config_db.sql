@@ -2,21 +2,21 @@
 --  Trivadis AG, Infrastructure Managed Services
 --  Saegereistrasse 29, 8152 Glattbrugg, Switzerland
 ----------------------------------------------------------------------------
---  Name......: 99_example_setup.sql
+--  Name......: 00_config_db.sql
 --  Author....: Stefan Oehrli (oes) stefan.oehrli@trivadis.com
 --  Editor....: Stefan Oehrli
---  Date......: 2019.12.07
+--  Date......: 2021.11.11
 --  Revision..:  
---  Purpose...: Script to switch off archivelog mode.
+--  Purpose...: Configure database parameter
 --  Notes.....:  
 --  Reference.: SYS (or grant manually to a DBA)
---  License...: Licensed under the Universal Permissive License v 1.0 as 
---              shown at http://oss.oracle.com/licenses/upl.
-----------------------------------------------------------------------------
---  Modified..:
---  see git revision history for more information on changes/updates
+--  License...: Apache License Version 2.0, January 2004 as shown
+--              at http://www.apache.org/licenses/
 ----------------------------------------------------------------------------
 CONNECT / AS SYSDBA
+ALTER SYSTEM SET db_domain='trivadislabs.com' SCOPE=spfile;
+--ALTER SYSTEM SET encrypt_new_tablespaces='DDL' SCOPE=both;
+
 SHUTDOWN IMMEDIATE;
 STARTUP MOUNT;
 ALTER DATABASE NOARCHIVELOG;
