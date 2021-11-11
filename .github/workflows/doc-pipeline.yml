@@ -1,0 +1,77 @@
+# ----------------------------------------------------------------------------
+# Trivadis AG, Infrastructure Managed Services
+# Saegereistrasse 29, 8152 Glattbrugg, Switzerland
+# ----------------------------------------------------------------------------
+# Name.......: pandoc_builds.yaml 
+# Author.....: Stefan Oehrli (oes) stefan.oehrli@trivadis.com
+# Editor.....: Stefan Oehrli
+# Date.......: 2021.02.23
+# Revision...: 
+# Purpose....: Pandoc build workflow to generate the different documentation
+# Notes......: --
+# Reference..: https://github.com/DavidAnson/markdownlint
+# ----------------------------------------------------------------------------
+name: Doc Build
+
+on:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - '.github/**'
+
+  pull_request:
+    branches: [ main ]
+    paths-ignore:
+      - '.github/**'
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  # - Check Markdown -----------------------------------------------------------
+  # job to check the documentation
+  check_docs:
+    name: Check Markdown
+    runs-on: ubuntu-latest
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      # Check Markdown using markdownlint-cli from docker images 06kellyjac/markdownlint-cli
+      - name: run markdownlint-cli
+        uses: docker://06kellyjac/markdownlint-cli
+        with:
+          args: .
+
+  # - Build EN docs ------------------------------------------------------------
+  # Job to build the english documentation
+  build_en_docs:
+    needs: check_docs
+    name: Build english documents
+    runs-on: ubuntu-latest
+    env:
+      LANGUAGE: en
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Populate env variables
+        run: |
+          echo "MD_FILES=$(printf '%s ' ${{ env.LANGUAGE }}/?x??-*.md)" >> $GITHUB_ENV
+          echo "REPOSITORY_NAME=$(echo '${{ github.repository }}' | awk -F '/' '{print $2}')" >> $GITHUB_ENV
+      # Build PDF using docker images oehrlis/pandoc
+      - name: Build pdf document
+        uses: docker://oehrlis/pandoc
+        with:
+          args: >-
+            --pdf-engine=xelatex 
+            --listings
+            --metadata-file=${{ env.LANGUAGE }}/metadata.yml
+            --resource-path=images
+            --filter pandoc-latex-environment
+            --output=tvd-${{ env.REPOSITORY_NAME }}_${{ env.LANGUAGE }}.pdf ${{ env.MD_FILES }}
+    
+      - uses: actions/upload-artifact@master
+        with:
+          name: Generated Documents
+          path: tvd-${{ env.REPOSITORY_NAME }}*
+
+# --- EOF -------------------------------------------------------------------
