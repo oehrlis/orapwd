@@ -24,10 +24,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Change etc config for 21c
+
 ### Fixed
 
 ### Removed
-
 
 ## [0.0.1] - 2021-11-11
 
