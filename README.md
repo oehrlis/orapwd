@@ -10,6 +10,8 @@ used directly as a template. Corresponding links and references in the Markdown
 files have to be adapted to the new repository afterwards. In general, these are
 just the links in this [README.md](README.md).
 
+![Sketch of Docker Lab Environment](images/docker-labenv.png)
+
 ## Downloads and Latest Builds
 
 The official release documents are always attached to the pipelines as artifact.

@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add SQL Scripts in [sql](sql/README.md).
 - Add setup configuration scripts for [21c](config/setup/README.md)
 - Add startup configuration scripts for [21c](config/startup/README.md)
+- Add Lab environment Image [docker-labenv.png](images/docker-labenv.png)
 
 ### Changed
 
